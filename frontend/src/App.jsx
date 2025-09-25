@@ -6,19 +6,23 @@ import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 
-import { Routes, Route } from "react-router-dom";
-import { useAuthStore } from "./store/useAuthStore.js";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
+
+  console.log({ onlineUsers });
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  console.log(authUser);
+  console.log({ authUser });
 
   if (isCheckingAuth && !authUser)
     return (
@@ -30,6 +34,7 @@ const App = () => {
   return (
     <div>
       <Navbar />
+
       <Routes>
         <Route
           path="/"
@@ -49,8 +54,9 @@ const App = () => {
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
         />
       </Routes>
+
+      <Toaster />
     </div>
   );
 };
-
 export default App;
